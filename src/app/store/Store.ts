@@ -1,12 +1,12 @@
 import {
-  ThunkDispatch,
   configureStore,
-  Action,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import { rootReducers } from "../reducers/Reducer";
 import { AuthUserGateway } from "../../auth/domain/auhtUserGateway";
 import { TimeLineGateWay } from "../../timeline/domain/TimeLineGateway";
+import { FakeAuthUserGAteway } from "../../auth/infra/FakeAuthUser";
+import { FakeTimeLineGateAway } from "../../timeline/infra/time-line-gateway/FakeTimeineGateway";
 
 interface Dependencies {
   authUserGateway: AuthUserGateway;
@@ -26,11 +26,19 @@ export const createStore = (dependencies: Dependencies) =>
   });
 
 export type AppStore = ReturnType<typeof createStore>;
-export type RootState = ReturnType<typeof rootReducers>;
-export type AppDispatch = ThunkDispatch<RootState, Dependencies, Action>;
+export type RootState = ReturnType<AppStore['getState']>;
+export type AppDispatch = AppStore['dispatch'];
 
 export const createAppAsyncThunk = createAsyncThunk.withTypes<{
-  state: RootState;
-  dispatch: AppDispatch;
-  extra: Dependencies;
-}>();
+  state: RootState
+  dispatch: AppDispatch
+  rejectValue: any
+  extra: Dependencies
+}>()
+
+
+const authUserGateway = new FakeAuthUserGAteway();
+
+const timelineGateway = new FakeTimeLineGateAway();
+
+export const store = createStore({ authUserGateway, timelineGateway });

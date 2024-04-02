@@ -1,6 +1,8 @@
+
 import { createAppAsyncThunk } from "../../app/store/Store";
 
-export const GetAuthUserTimeLine = createAppAsyncThunk(
+
+export const GetAuthUserTimeLine = createAppAsyncThunk (
   "get-auth-user-timeline",
 
   async (_, { extra: { authUserGateway, timelineGateway } }) => {
@@ -8,6 +10,8 @@ export const GetAuthUserTimeLine = createAppAsyncThunk(
     const { timeline } = await timelineGateway.getUserTimeLine({
       userId: autherUser,
     });
+
+    console.log(timeline)
 
     return timeline;
   }

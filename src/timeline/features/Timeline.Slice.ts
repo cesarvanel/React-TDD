@@ -33,10 +33,10 @@ export const TimeLineSlice = createSlice({
   initialState: initialTimeLineState,
   reducers: {},
 
-  extraReducers(builder) {
-    console.log(builder, "builder");
+  extraReducers:(builder) => {
     builder.addCase(GetAuthUserTimeLine.fulfilled, (_, action) => {
-      return action.payload;
+      return action.payload
+     ;
     });
   },
 });

@@ -2,7 +2,7 @@ import { GetUserTimeLineResponse } from "../features/thunks/get-user-timeline/Ge
 
 export interface TimeLineGateWay {
   getUserTimeLine: ({
-    userId,
+    userId
   }: {
     userId: string;
   }) => Promise<GetUserTimeLineResponse>;
