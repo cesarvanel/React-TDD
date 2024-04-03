@@ -1,19 +1,19 @@
-import {
-  configureStore,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
+import { configureStore, createAsyncThunk } from "@reduxjs/toolkit";
 import { rootReducers } from "../reducers/Reducer";
 import { AuthUserGateway } from "../../auth/domain/auhtUserGateway";
 import { TimeLineGateWay } from "../../timeline/domain/TimeLineGateway";
 import { FakeAuthUserGAteway } from "../../auth/infra/FakeAuthUser";
 import { FakeTimeLineGateAway } from "../../timeline/infra/time-line-gateway/FakeTimeineGateway";
 
-interface Dependencies {
+export interface Dependencies {
   authUserGateway: AuthUserGateway;
   timelineGateway: TimeLineGateWay;
 }
 
-export const createStore = (dependencies: Dependencies) =>
+export const createStore = (
+  dependencies: Dependencies,
+  preloadedState?: Partial<ReturnType<typeof rootReducers>>
+) =>
   configureStore({
     reducer: rootReducers,
     middleware: (getDefaultMiddleware) => {
@@ -23,19 +23,19 @@ export const createStore = (dependencies: Dependencies) =>
         },
       });
     },
+    preloadedState,
   });
 
 export type AppStore = ReturnType<typeof createStore>;
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];
 
 export const createAppAsyncThunk = createAsyncThunk.withTypes<{
-  state: RootState
-  dispatch: AppDispatch
-  rejectValue: any
-  extra: Dependencies
-}>()
-
+  state: RootState;
+  dispatch: AppDispatch;
+  rejectValue: object;
+  extra: Dependencies;
+}>();
 
 const authUserGateway = new FakeAuthUserGAteway();
 

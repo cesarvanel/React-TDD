@@ -1,6 +1,12 @@
 export interface GetUserTimeLineResponse {
   timeline: {
+    id: string;
     user: string;
-    messages: { text: string; author: string; publishedAt: string }[];
+    messages: {
+      id: string;
+      text: string;
+      author: string;
+      publishedAt: string;
+    }[];
   };
 }

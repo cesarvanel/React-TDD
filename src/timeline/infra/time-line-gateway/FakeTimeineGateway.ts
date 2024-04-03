@@ -6,7 +6,9 @@ export class FakeTimeLineGateAway implements TimeLineGateWay {
     string,
     {
       user: string;
+      id: string;
       messages: {
+        id: string;
         text: string;
         author: string;
         publishedAt: string;
