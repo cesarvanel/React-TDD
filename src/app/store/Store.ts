@@ -4,6 +4,7 @@ import { AuthUserGateway } from "../../auth/domain/auhtUserGateway";
 import { TimeLineGateWay } from "../../timeline/domain/TimeLineGateway";
 import { FakeAuthUserGAteway } from "../../auth/infra/FakeAuthUser";
 import { FakeTimeLineGateAway } from "../../timeline/infra/time-line-gateway/FakeTimeineGateway";
+import { useDispatch, useSelector } from "react-redux";
 
 export interface Dependencies {
   authUserGateway: AuthUserGateway;
@@ -29,6 +30,10 @@ export const createStore = (
 export type AppStore = ReturnType<typeof createStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
+
 
 export const createAppAsyncThunk = createAsyncThunk.withTypes<{
   state: RootState;

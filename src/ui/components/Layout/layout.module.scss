@@ -1,0 +1,12 @@
+.Layout {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  .main {
+    position: relative;
+    background: green;
+    margin-left:var(--sidebar-with);
+    min-height: 100vh;
+
+  }
+}
