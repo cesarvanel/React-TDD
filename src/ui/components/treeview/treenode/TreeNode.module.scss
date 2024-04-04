@@ -1,0 +1,12 @@
+.TreeNode {
+  .text-label {
+    margin-bottom: 20px;
+  }
+  .children {
+    padding-left: 10px;
+    border-left: 1px solid red;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    
+  }
+}

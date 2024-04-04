@@ -1,0 +1,8 @@
+.Header {
+  display: none;
+  height: 60px;
+  background-color: blue;
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
