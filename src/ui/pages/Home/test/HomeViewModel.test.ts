@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { selectHomeViewModel } from "../view/HomeViewModel";
 import { createTestStore } from "../../../../app/test-store/TestStore";
+import * as timeago from 'timeago.js';
 
 describe("Home view Model", () => {
   test("there no timeline in the store", () => {
@@ -131,7 +132,7 @@ describe("Home view Model", () => {
             userId:"cesar", 
             username:"cesar",
             profilePicture:'http://picsum/photos/200?random=cesar',
-            publishedAt: "4 hours ago",
+            publishedAt: timeago.format("2024-04-03 07:20:00", "my-locale"),
             text: "hi maelle",
           },
           {
@@ -139,7 +140,7 @@ describe("Home view Model", () => {
             userId:"maelle", 
             username:"maelle",
             profilePicture:'http://picsum/photos/200?random=maelle',
-            publishedAt: "4 hours ago",
+            publishedAt: timeago.format("2024-04-03 07:40:00", "my-locale"),
             text: "comment tu vas ",
           },
         ],

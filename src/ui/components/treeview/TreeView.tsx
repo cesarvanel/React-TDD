@@ -1,12 +1,14 @@
 import { TreeNode } from "./treenode/TreeNode";
 
-export type TreeViewItem = {
-  key: string;
-  label: string;
-  children: {
+
+type TreeViewLabel = {
     key: string;
     label: string;
-  }[];
+}
+
+export type TreeViewItem = {
+  item: TreeViewLabel
+  children: TreeViewLabel[]
 };
 
 export type TreeViewDataIltem = {
