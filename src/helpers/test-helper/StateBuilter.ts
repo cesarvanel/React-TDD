@@ -27,26 +27,28 @@ const WithOneMessage = createAction<Message[]>("WithOneMessage");
 
 const WithMessages = createAction<Message[]>("WithMessages");
 
+const WithAuthUser = createAction<{ authUser: string }>("WithAuthUser");
+
 const reducer = createReducer(initalState, (builder) => {
-  builder.addCase(withTimeLine, (state, action) => {
-    TimelineAdapter.addOne(state.timelines, action.payload);
-  });
-
-  builder.addCase(WithOneMessage, (state, action) => {
-    MessagesAdapter.addMany(state.messages, action.payload);
-  });
-
-  builder.addCase(TimelineLoading, (state) => {
-    state.timelines.loadingTimeLineByUser = true;
-  });
-
-  builder.addCase(TimelineisNotLoading, (state) => {
-    state.timelines.loadingTimeLineByUser = false;
-  });
-
-  builder.addCase(WithMessages, (state, action) => {
-    MessagesAdapter.addMany(state.messages, action.payload);
-  });
+  builder
+    .addCase(withTimeLine, (state, action) => {
+      TimelineAdapter.addOne(state.timelines, action.payload);
+    })
+    .addCase(WithOneMessage, (state, action) => {
+      MessagesAdapter.addMany(state.messages, action.payload);
+    })
+    .addCase(TimelineLoading, (state) => {
+      state.timelines.loadingTimeLineByUser = true;
+    })
+    .addCase(TimelineisNotLoading, (state) => {
+      state.timelines.loadingTimeLineByUser = false;
+    })
+    .addCase(WithMessages, (state, action) => {
+      MessagesAdapter.addMany(state.messages, action.payload);
+    })
+    .addCase(WithAuthUser, (state, action) => {
+      state.auth.authUser = action.payload.authUser;
+    });
 });
 
 export const stateBuilder = (baseState = initalState) => {
@@ -60,6 +62,7 @@ export const stateBuilder = (baseState = initalState) => {
     TimelineLoading: reduce(TimelineLoading),
     TimelineisNotLoading: reduce(TimelineisNotLoading),
     WithMessages: reduce(WithMessages),
+    WithAuthUser: reduce(WithAuthUser),
     build: (): RootState => {
       return baseState;
     },

@@ -11,8 +11,6 @@ export const useHome = () => {
     dispatch(GetAuthUserTimeLine());
   }, []);
 
-  console.log(timeline, "timeline");
-
   return {
     timeline,
   };

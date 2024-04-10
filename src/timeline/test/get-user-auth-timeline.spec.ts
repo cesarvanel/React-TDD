@@ -82,7 +82,7 @@ const givenExistingTimeLine = (timeline: {
   user: string;
   messages: { id: string; text: string; author: string; publishedAt: string }[];
 }) => {
-  timelineGateway.timeLineByUser.set("cesar", timeline);
+  timelineGateway.timeLineByUser.set(timeline.user, timeline);
 };
 
 const whenRetrieverAuthenticatedUserTimeLine = async () => {
