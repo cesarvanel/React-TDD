@@ -3,6 +3,6 @@ import { TimeLineSlice } from "../../timeline/features/Timeline.Slice";
 import { MessagesSlice } from "../../messages/feature/MessageSlice";
 
 export const rootReducers = combineReducers({
-  timeLineReducers: TimeLineSlice.reducer,
+  timelines: TimeLineSlice.reducer,
   messages: MessagesSlice.reducer,
 });

@@ -1,9 +1,4 @@
-import {
-  AnyAction,
-  ThunkDispatch,
-  configureStore,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
+import { configureStore, createAsyncThunk } from "@reduxjs/toolkit";
 import { rootReducers } from "../reducers/Reducer";
 import { AuthUserGateway } from "../../auth/domain/auhtUserGateway";
 import { TimeLineGateWay } from "../../timeline/domain/TimeLineGateway";
@@ -18,7 +13,7 @@ export interface Dependencies {
 
 export const createStore = (
   dependencies: Dependencies,
-  preloadedState?: Partial<ReturnType<typeof rootReducers>>
+  preloadedState?: Partial<RootReducers>
 ) =>
   configureStore({
     reducer: rootReducers,
@@ -34,7 +29,8 @@ export const createStore = (
 
 export type AppStore = ReturnType<typeof createStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
-export type AppDispatch = ThunkDispatch<RootState, Dependencies, AnyAction>;
+export type AppDispatch = AppStore["dispatch"];
+export type RootReducers = ReturnType<typeof rootReducers>;
 
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();

@@ -1,10 +1,10 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
 
-export interface Messages {
+export interface Message {
   id: string;
   text: string;
   author: string;
   publishedAt: string;
 }
 
-export const MessagesAdapter = createEntityAdapter<Messages>();
+export const MessagesAdapter = createEntityAdapter<Message>();

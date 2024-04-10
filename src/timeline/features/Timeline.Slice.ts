@@ -26,7 +26,7 @@ export const TimeLineSlice = createSlice({
 });
 
 export const selectTimelineById = (timelineId: string, state: RootState) =>
-  TimelineAdapter.getSelectors().selectById(state.timeLineReducers, timelineId);
+  TimelineAdapter.getSelectors().selectById(state.timelines, timelineId);
 
 export const selectIsUserTimeLoading = (state: RootState) =>
-  state.timeLineReducers.loadingTimeLineByUser;
+  state.timelines.loadingTimeLineByUser;

@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import { selectHomeViewModel } from "../view/HomeViewModel";
 import { createTestStore } from "../../../../app/test-store/TestStore";
 import * as timeago from "timeago.js";
+import { stateBuilder } from "../../../../helpers/test-helper/StateBuilter";
 
 describe("Home view Model", () => {
   test("there no timeline in the store", () => {
@@ -16,16 +17,12 @@ describe("Home view Model", () => {
   });
 
   test("timeline Loading ", () => {
-    const store = createTestStore(
-      {},
-      {
-        timeLineReducers: {
-          ids: [],
-          entities: {},
-          loadingTimeLineByUser: true,
-        },
-      }
-    );
+    const initalState = stateBuilder()
+      .TimelineLoading({
+        loadingTimeLineByUser: true,
+      })
+      .build();
+    const store = createTestStore({}, initalState);
 
     const homeViewModel = selectHomeViewModel(store.getState());
     expect(homeViewModel).toEqual({
@@ -37,22 +34,14 @@ describe("Home view Model", () => {
   });
 
   test("there is no messages in the store ", () => {
-    const store = createTestStore(
-      {},
-      {
-        timeLineReducers: {
-          ids: ["cesar-timeline-id"],
-          entities: {
-            "cesar-timeline-id": {
-              id: "cesar-timeline-id",
-              user: "cesar",
-              messages: [],
-            },
-          },
-          loadingTimeLineByUser: false,
-        },
-      }
-    );
+    const initalState = stateBuilder()
+      .withTimeLine({
+        id: "cesar-timeline-id",
+        user: "cesar",
+        messages: [],
+      })
+      .build();
+    const store = createTestStore({}, initalState);
 
     const homeViewModel = selectHomeViewModel(store.getState());
     expect(homeViewModel).toEqual({
@@ -64,33 +53,22 @@ describe("Home view Model", () => {
   });
 
   test("there is one message in the timeline ", () => {
-    const store = createTestStore(
-      {},
-      {
-        timeLineReducers: {
-          ids: ["cesar-timeline-id"],
-          entities: {
-            "cesar-timeline-id": {
-              id: "cesar-timeline-id",
-              user: "cesar",
-              messages: ["msg1-1"],
-            },
-          },
-          loadingTimeLineByUser: false,
+    const initalState = stateBuilder()
+      .withTimeLine({
+        id: "cesar-timeline-id",
+        user: "cesar",
+        messages: ["msg1-1"],
+      })
+      .WithMessages([
+        {
+          id: "msg1-1",
+          text: "hi maelle",
+          author: "cesar",
+          publishedAt: " 2024-03-03 09:20:00",
         },
-        messages: {
-          ids: ["msg1-1"],
-          entities: {
-            "msg1-1": {
-              id: "msg1-1",
-              author: "cesar",
-              publishedAt: " 2024-03-03 09:20:00",
-              text: "hi maelle",
-            },
-          },
-        },
-      }
-    );
+      ])
+      .build();
+    const store = createTestStore({}, initalState);
 
     const homeViewModel = selectHomeViewModel(store.getState());
     expect(homeViewModel).toEqual({
@@ -111,39 +89,28 @@ describe("Home view Model", () => {
   });
 
   test("there is many message in the timeline ", () => {
-    const store = createTestStore(
-      {},
-      {
-        timeLineReducers: {
-          ids: ["cesar-timeline-id"],
-          entities: {
-            "cesar-timeline-id": {
-              id: "cesar-timeline-id",
-              user: "cesar",
-              messages: ["msg1-1", "msg2-2"],
-            },
-          },
-          loadingTimeLineByUser: false,
+    const initalState = stateBuilder()
+      .withTimeLine({
+        id: "cesar-timeline-id",
+        user: "cesar",
+        messages: ["msg1-1", "msg2-2"],
+      })
+      .WithMessages([
+        {
+          id: "msg1-1",
+          author: "cesar",
+          publishedAt: "2024-04-03 07:20:00",
+          text: "hi maelle",
         },
-        messages: {
-          ids: ["msg1-1", "msg2-2"],
-          entities: {
-            "msg1-1": {
-              id: "msg1-1",
-              author: "cesar",
-              publishedAt: "2024-04-03 07:20:00",
-              text: "hi maelle",
-            },
-            "msg2-2": {
-              id: "msg2-2",
-              author: "maelle",
-              publishedAt: "2024-04-03 07:40:00",
-              text: "comment tu vas ",
-            },
-          },
+        {
+          id: "msg2-2",
+          author: "maelle",
+          publishedAt: "2024-04-03 07:40:00",
+          text: "comment tu vas ",
         },
-      }
-    );
+      ])
+      .build();
+    const store = createTestStore({}, initalState);
 
     const homeViewModel = selectHomeViewModel(store.getState());
     expect(homeViewModel).toEqual({
