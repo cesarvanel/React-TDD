@@ -2,8 +2,11 @@ import { describe, it, expect } from "vitest";
 import { GetAuthUserTimeLine } from "../usecase/GetAuthUserTimeLine";
 import { FakeTimeLineGateAway } from "../infra/time-line-gateway/FakeTimeineGateway";
 import { FakeAuthUserGAteway } from "../../auth/infra/FakeAuthUser";
-import { createStore } from "../../app/store/Store";
-import { selectTimelineById } from "../features/Timeline.Slice";
+import { RootState, createStore } from "../../app/store/Store";
+import {
+  selectIsUserTimeLoading,
+  selectTimelineById,
+} from "../features/Timeline.Slice";
 import { selectMessage } from "../../messages/feature/MessageSlice";
 
 const authUserGateway = new FakeAuthUserGAteway();
@@ -38,7 +41,11 @@ describe("feature: get a time line when a user is auhtenticated ", () => {
     });
 
     //act (when)
-    await whenRetrieverAuthenticatedUserTimeLine();
+    const timelineRetieveing = whenRetrieverAuthenticatedUserTimeLine();
+
+    timelineUserShouldBeLoading(store.getState());
+
+    await timelineRetieveing;
 
     //then
 
@@ -65,6 +72,12 @@ describe("feature: get a time line when a user is auhtenticated ", () => {
 
 const givenAuthenticatedUserId = (user: string) => {
   authUserGateway.auhtuser = user;
+};
+
+const timelineUserShouldBeLoading = (state: RootState) => {
+  const isTimelineUserLoading = selectIsUserTimeLoading(state);
+
+  expect(isTimelineUserLoading).toBe(true);
 };
 
 const givenExistingTimeLine = (timeline: {
@@ -97,4 +110,6 @@ const thenThereceivingTimeLineShoulBe = (expectedTimeLine: {
   expectedTimeLine.messages.forEach((msg) => {
     expect(selectMessage(msg.id, store.getState())).toEqual(msg);
   });
+
+  expect(selectIsUserTimeLoading(store.getState())).toBe(false);
 };

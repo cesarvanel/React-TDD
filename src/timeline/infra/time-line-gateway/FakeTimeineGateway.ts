@@ -2,6 +2,7 @@ import { TimeLineGateWay } from "../../domain/TimeLineGateway";
 import { GetUserTimeLineResponse } from "../../features/thunks/get-user-timeline/GetUserTimeLineResponse";
 
 export class FakeTimeLineGateAway implements TimeLineGateWay {
+  constructor(private readonly delay = 0) {}
   timeLineByUser = new Map<
     string,
     {
@@ -21,12 +22,16 @@ export class FakeTimeLineGateAway implements TimeLineGateWay {
   }: {
     userId: string;
   }): Promise<GetUserTimeLineResponse> {
-    const timeline = this.timeLineByUser.get(userId);
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const timeline = this.timeLineByUser.get(userId);
 
-    if (!timeline) return Promise.reject();
+        if (!timeline) return reject();
 
-    return Promise.resolve({
-      timeline,
+        return resolve({
+          timeline,
+        });
+      }, this.delay);
     });
   }
 }

@@ -1,11 +1,24 @@
 import { RootState } from "../../../../app/store/Store";
 import { selectMessagesByIds } from "../../../../messages/feature/MessageSlice";
-import { selectTimelineById } from "../../../../timeline/features/Timeline.Slice";
-import * as timeago from 'timeago.js';
-
+import {
+  selectIsUserTimeLoading,
+  selectTimelineById,
+} from "../../../../timeline/features/Timeline.Slice";
+import * as timeago from "timeago.js";
 
 export const selectHomeViewModel = (state: RootState) => {
   const timeline = selectTimelineById("cesar-timeline-id", state);
+
+  const loading = selectIsUserTimeLoading(state);
+
+  if (loading) {
+    return {
+      timeline: {
+        type: "EMTY_TIMELINE_LOADING",
+        infos: "loading...",
+      },
+    };
+  }
 
   if (!timeline) {
     return {
@@ -24,16 +37,16 @@ export const selectHomeViewModel = (state: RootState) => {
     };
   }
 
-  const messages = selectMessagesByIds(timeline.messages, state).map((msg) =>{
+  const messages = selectMessagesByIds(timeline.messages, state).map((msg) => {
     return {
-      id:msg.id,
-      userId:msg.author, 
-      username:msg.author,
-      profilePicture:`http://picsum/photos/200?random=${msg.author}`,
-      publishedAt:timeago.format(msg.publishedAt, 'my-locale'),
+      id: msg.id,
+      userId: msg.author,
+      username: msg.author,
+      profilePicture: `http://picsum/photos/200?random=${msg.author}`,
+      publishedAt: timeago.format(msg.publishedAt, "my-locale"),
       text: msg.text,
-    }
-  })
+    };
+  });
 
   return {
     timeline: {

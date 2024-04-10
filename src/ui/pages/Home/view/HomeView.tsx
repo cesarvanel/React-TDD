@@ -1,8 +1,10 @@
+import { useHome } from "./useHome";
 
 const HomeView = () => {
-  return (
-    <div>HomeView</div>
-  )
-}
+  const { timeline } = useHome();
 
-export default HomeView
+  console.log(timeline);
+  return <div>{timeline.timeline.type}</div>;
+};
+
+export default HomeView;
