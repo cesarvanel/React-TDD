@@ -1,14 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createAppAsyncThunk } from "../../app/store/Store";
+import { selectAuthUser } from "../../auth/feature/AuthSlice";
+import { selectIsUserTimeLoading } from "../features/Timeline.Slice";
 
 export const GetAuthUserTimeLine = createAsyncThunk(
   "get-auth-user-timeline",
 
-  async (
-    _,
-    { extra: { authUserGateway, timelineGateway }, rejectWithValue }
-  ) => {
-    const autherUser = authUserGateway.getAuthUser();
+  async (_, { extra: { timelineGateway }, rejectWithValue, getState }) => {
+    const autherUser = selectAuthUser(getState());
     try {
       const { timeline } = await timelineGateway.getUserTimeLine({
         userId: autherUser,
@@ -16,8 +15,15 @@ export const GetAuthUserTimeLine = createAsyncThunk(
 
       return timeline;
     } catch (error) {
-      const err = error as object;
+      const err = error as unknown as any;
       return rejectWithValue(err);
     }
+  },
+  {
+    condition(_, { getState }) {
+      const isTimelineUserLoading = selectIsUserTimeLoading(getState());
+
+      return !isTimelineUserLoading;
+    },
   }
 );

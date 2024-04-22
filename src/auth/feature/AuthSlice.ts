@@ -26,3 +26,5 @@ export const AuthSlice = createSlice({
 
 export const selectIsAuthenticated = (state: RootState) =>
   state.auth.authUser !== undefined;
+
+export const selectAuthUser = (state: RootState) => state.auth.authUser ?? "";

@@ -4,6 +4,10 @@ import { createTestStore } from "../../../../app/test-store/TestStore";
 import * as timeago from "timeago.js";
 import { stateBuilder } from "../../../../helpers/test-helper/StateBuilter";
 
+const stateBuilderWithAuthenticated = stateBuilder().WithAuthUser({
+  authUser: "cesar",
+});
+
 describe("Home view Model", () => {
   test("there no timeline in the store", () => {
     const store = createTestStore();
@@ -34,7 +38,7 @@ describe("Home view Model", () => {
   });
 
   test("there is no messages in the store ", () => {
-    const initalState = stateBuilder()
+    const initalState = stateBuilderWithAuthenticated
       .withTimeLine({
         id: "cesar-timeline-id",
         user: "cesar",
@@ -53,7 +57,7 @@ describe("Home view Model", () => {
   });
 
   test("there is one message in the timeline ", () => {
-    const initalState = stateBuilder()
+    const initalState = stateBuilderWithAuthenticated
       .withTimeLine({
         id: "cesar-timeline-id",
         user: "cesar",
@@ -89,7 +93,7 @@ describe("Home view Model", () => {
   });
 
   test("there is many message in the timeline ", () => {
-    const initalState = stateBuilder()
+    const initalState = stateBuilderWithAuthenticated
       .withTimeLine({
         id: "cesar-timeline-id",
         user: "cesar",
