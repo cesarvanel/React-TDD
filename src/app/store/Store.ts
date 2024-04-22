@@ -53,7 +53,7 @@ const authUserGateway = new FakeAuthUserGAteway();
 
 const timelineGateway = new FakeTimeLineGateAway(1000);
 
-timelineGateway.timeLineByUser.set(authUserGateway.auhtuser, {
+timelineGateway.timeLineByUser.set("cesar", {
   id: "cesar-timeline-id",
   user: "cesar",
   messages: [
@@ -61,6 +61,26 @@ timelineGateway.timeLineByUser.set(authUserGateway.auhtuser, {
       id: "msg1-id",
       text: "hello cesar",
       author: "vanel",
+      publishedAt: "2023-05T12:06:00.000Z",
+    },
+    {
+      id: "msg2-id",
+      text: "tu fais quoi demain",
+      author: "daniel",
+      publishedAt: "2023-05T12:04:00.000Z",
+    },
+  ],
+});
+
+
+timelineGateway.timeLineByUser.set("vanel", {
+  id: "vanel-timeline-id",
+  user: "vanel",
+  messages: [
+    {
+      id: "msg1-id",
+      text: "hello cesar",
+      author: "maelle",
       publishedAt: "2023-05T12:06:00.000Z",
     },
     {

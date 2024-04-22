@@ -5,7 +5,7 @@ import { AuthenticateWithGoogleAccount } from "../usecase/AuthenticateWithGoogle
 import { FakeAuthUserGAteway } from "../infra/FakeAuthUser";
 
 describe("feature: Login with google Account ", async () => {
-  test("Example cesar it authenticated successfuly", async () => {
+  test("Example cesar it authenticated successful", async () => {
     // given
     givenAuthenticatedForUserGoogleAccount("cesar");
 

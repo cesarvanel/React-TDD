@@ -1,26 +1,27 @@
-import { describe, it, expect } from "vitest";
-import { GetAuthUserTimeLine } from "../usecase/GetAuthUserTimeLine";
-import { FakeTimeLineGateAway } from "../infra/time-line-gateway/FakeTimeineGateway";
-import { FakeAuthUserGAteway } from "../../auth/infra/FakeAuthUser";
-import { RootState, createStore, AppStore } from "../../app/store/Store";
-import { selectIsUserTimeLoading } from "../features/Timeline.Slice";
-import { stateBuilder } from "../../helpers/test-helper/StateBuilter";
+import { describe, it, beforeEach } from "vitest";
+import { createTimeLineFixture, TimelinesFixture } from "./fixture-timeline";
+import { AuthFixture, createAuthFixture } from "../../auth/test/fixture-auth";
+import { stateBuilderProvider } from "../../helpers/test-helper/StateBuilter";
 
-const authUserGateway = new FakeAuthUserGAteway();
 
-const timelineGateway = new FakeTimeLineGateAway();
+describe("feature: get a time line when a user is authenticated ", () => {
 
-let store: AppStore;
 
-let testStateBuilder = stateBuilder();
+  const  testStateBuilderProvider = stateBuilderProvider()
+  let authFixture :AuthFixture
+  let fixture :TimelinesFixture;
 
-describe("feature: get a time line when a user is auhtenticated ", () => {
+
+  beforeEach(() =>{
+    authFixture = createAuthFixture(testStateBuilderProvider)
+    fixture = createTimeLineFixture(testStateBuilderProvider)
+  })
   it("Example: it cesar it authenticated ", async () => {
     // arrange
 
-    givenAuthenticatedUserId("cesar");
+    authFixture.givenAuthenticatedUserId("cesar");
 
-    givenExistingTimeLine({
+    fixture.givenExistingTimeLine({
       id: "cesar-timeline-id",
       user: "cesar",
       messages: [
@@ -40,15 +41,15 @@ describe("feature: get a time line when a user is auhtenticated ", () => {
     });
 
     //act (when)
-    const timelineRetieveing = whenRetrieverAuthenticatedUserTimeLine();
+    const timelineRetrieving = fixture.whenRetrievingAuthUserTimeLine();
 
-    timelineUserShouldBeLoading(store.getState());
+    fixture.timelineUserShouldBeLoading();
 
-    await timelineRetieveing;
+    await timelineRetrieving;
 
     //then
 
-    thenThereceivingTimeLineShoulBe({
+    fixture.thenThereceivingTimeLineShouldBe({
       id: "cesar-timeline-id",
       user: "cesar",
       messages: [
@@ -69,51 +70,5 @@ describe("feature: get a time line when a user is auhtenticated ", () => {
   });
 });
 
-const givenAuthenticatedUserId = (user: string) => {
-  testStateBuilder = testStateBuilder.WithAuthUser({ authUser: user });
-};
 
-const timelineUserShouldBeLoading = (state: RootState) => {
-  const isTimelineUserLoading = selectIsUserTimeLoading(state);
 
-  expect(isTimelineUserLoading).toBe(true);
-};
-
-const givenExistingTimeLine = (timeline: {
-  id: string;
-  user: string;
-  messages: { id: string; text: string; author: string; publishedAt: string }[];
-}) => {
-  timelineGateway.timeLineByUser.set(timeline.user, timeline);
-};
-
-const whenRetrieverAuthenticatedUserTimeLine = async () => {
-  store = createStore(
-    {
-      authUserGateway,
-      timelineGateway,
-    },
-    testStateBuilder.build()
-  );
-  await store.dispatch(GetAuthUserTimeLine());
-};
-
-const thenThereceivingTimeLineShoulBe = (expectedTimeLine: {
-  id: string;
-  user: string;
-  messages: { id: string; text: string; author: string; publishedAt: string }[];
-}) => {
-  const isLoading = selectIsUserTimeLoading(store.getState());
-  const expectedState = stateBuilder()
-    .WithAuthUser({ authUser: expectedTimeLine.user })
-    .withTimeLine({
-      id: expectedTimeLine.id,
-      user: expectedTimeLine.user,
-      messages: expectedTimeLine.messages.map((m) => m.id),
-    })
-    .WithMessages(expectedTimeLine.messages)
-    .TimelineisNotLoading({ loadingTimeLineByUser: isLoading })
-    .build();
-
-  expect(store.getState()).toEqual(expectedState);
-};

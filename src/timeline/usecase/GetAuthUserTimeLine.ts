@@ -7,10 +7,10 @@ export const GetAuthUserTimeLine = createAsyncThunk(
   "get-auth-user-timeline",
 
   async (_, { extra: { timelineGateway }, rejectWithValue, getState }) => {
-    const autherUser = selectAuthUser(getState());
+    const authUser = selectAuthUser(getState());
     try {
       const { timeline } = await timelineGateway.getUserTimeLine({
-        userId: autherUser,
+        userId: authUser,
       });
 
       return timeline;
@@ -19,11 +19,11 @@ export const GetAuthUserTimeLine = createAsyncThunk(
       return rejectWithValue(err);
     }
   },
-  {
-    condition(_, { getState }) {
-      const isTimelineUserLoading = selectIsUserTimeLoading(getState());
+  // {
+  //   condition(_, { getState }) {
+  //     const isTimelineUserLoading = selectIsUserTimeLoading(getState());
 
-      return !isTimelineUserLoading;
-    },
-  }
+  //     return !isTimelineUserLoading;
+  //   },
+  // }
 );
