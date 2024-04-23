@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest",
+    "test:e2e": "vitest --config ./vitest.config.e2e.ts",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ngneat/falso": "^7.2.0",
     "@reduxjs/toolkit": "^2.2.2",
     "@types/react-redux": "^7.1.33",
     "@types/react-router-dom": "^5.3.3",
@@ -25,6 +27,8 @@
     "vite-tsconfig-paths": "^4.3.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^15.0.2",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/node-sass": "^4.11.7",
     "@types/react": "^18.2.66",
@@ -35,6 +39,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "jsdom": "^24.0.0",
     "sass": "^1.72.0",
     "sass-loader": "^14.1.1",
     "typescript": "^5.2.2",
