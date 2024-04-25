@@ -14,7 +14,7 @@ describe("feature: retrieving user profile ", () => {
   it("Example: we are on vanel profile ", async () => {
     // arrange
 
-    fixture.givenExistingTimeLine({
+    fixture.givenExistingRemoteTimeLine({
       id: "vanel-timeline-id",
       user: "vanel",
       messages: [

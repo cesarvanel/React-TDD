@@ -32,7 +32,7 @@ const WithAuthUser = createAction<{ authUser: string }>("WithAuthUser");
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(withTimeLine, (state, action) => {
-      TimelineAdapter.addOne(state.timelines, action.payload);
+      TimelineAdapter.upsertOne(state.timelines, action.payload);
     })
     .addCase(WithOneMessage, (state, action) => {
       MessagesAdapter.addMany(state.messages, action.payload);

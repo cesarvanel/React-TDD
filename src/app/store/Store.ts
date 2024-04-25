@@ -8,13 +8,19 @@ import {
 import { rootReducers } from "../reducers/Reducer";
 import { AuthUserGateway } from "../../auth/domain/auhtUserGateway";
 import { TimeLineGateWay } from "../../timeline/domain/TimeLineGateway";
-import { FakeAuthUserGAteway } from "../../auth/infra/FakeAuthUser";
-import { FakeTimeLineGateAway } from "../../timeline/infra/time-line-gateway/FakeTimeineGateway";
+import { FakeAuthUserGAtewayWithFakeData } from "../../auth/infra/FakeAuthUser";
 import { useDispatch, useSelector } from "react-redux";
+import { FakeDataTimeLineGateway } from "../../timeline/infra/fake-data-time-line-gateway/FakeDataTimeLineGateway";
+import { RealDateProvider } from "../../timeline/infra/date-provider/RealDateProvider";
+import { DateProvider } from "../../timeline/domain/DateProvider";
+import { MessageGateway } from "../../messages/domain/MessageGateway";
+import { FakeMessageGateway } from "../../messages/infra/FakeMessageGateway";
 
 export interface Dependencies {
   authUserGateway: AuthUserGateway;
   timelineGateway: TimeLineGateWay;
+  messageGateway:MessageGateway;
+  dateProvider:DateProvider
 }
 
 export const createStore = (
@@ -49,47 +55,14 @@ export const createAppAsyncThunk = createAsyncThunk.withTypes<{
   extra: Dependencies;
 }>();
 
-const authUserGateway = new FakeAuthUserGAteway();
-
-const timelineGateway = new FakeTimeLineGateAway(1000);
-
-timelineGateway.timeLineByUser.set("cesar", {
-  id: "cesar-timeline-id",
-  user: "cesar",
-  messages: [
-    {
-      id: "msg1-id",
-      text: "hello cesar",
-      author: "vanel",
-      publishedAt: "2023-05T12:06:00.000Z",
-    },
-    {
-      id: "msg2-id",
-      text: "tu fais quoi demain",
-      author: "daniel",
-      publishedAt: "2023-05T12:04:00.000Z",
-    },
-  ],
-});
+const authUserGateway = new FakeAuthUserGAtewayWithFakeData();
 
 
-timelineGateway.timeLineByUser.set("vanel", {
-  id: "vanel-timeline-id",
-  user: "vanel",
-  messages: [
-    {
-      id: "msg1-id",
-      text: "hello cesar",
-      author: "maelle",
-      publishedAt: "2023-05T12:06:00.000Z",
-    },
-    {
-      id: "msg2-id",
-      text: "tu fais quoi demain",
-      author: "daniel",
-      publishedAt: "2023-05T12:04:00.000Z",
-    },
-  ],
-});
+const dateProvider = new RealDateProvider()
 
-export const store = createStore({ authUserGateway, timelineGateway });
+const messageGateway = new FakeMessageGateway()
+
+const timelineGateway = new FakeDataTimeLineGateway(1000);
+
+
+export const store = createStore({ authUserGateway, timelineGateway,messageGateway, dateProvider});

@@ -3,6 +3,8 @@ import { GetAuthUserTimeLine } from "../usecase/GetAuthUserTimeLine";
 import { TimelineAdapter } from "../domain/TimeLine";
 import { RootState } from "../../app/store/Store";
 import { GetUserTimeLine } from "../usecase/GetUserTimeLine";
+import { PostMessages } from "../usecase/PostMessages";
+
 
 export const TimeLineSlice = createSlice({
   name: "timeline",
@@ -11,6 +13,14 @@ export const TimeLineSlice = createSlice({
   }),
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(PostMessages.pending, (state, action) => {
+      TimelineAdapter.updateOne(state, {
+        id: action.meta.arg.timelineId,
+        changes: {
+          messages: [action.meta.arg.id],
+        },
+      });
+    });
     builder.addMatcher(
       isAnyOf(GetAuthUserTimeLine.fulfilled, GetUserTimeLine.fulfilled),
       (state, action) => {

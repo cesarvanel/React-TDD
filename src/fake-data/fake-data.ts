@@ -26,7 +26,7 @@ export const users = new Map(
 
 export const fakeAuthUser = randomPickFromMap(users);
 
-export const messages = new Map(
+export const messagesMap = new Map(
   generateRandomIds(100).map((msgId) => [
     msgId,
     {
@@ -43,7 +43,7 @@ export const messages = new Map(
 export const userLikesByMessage = new Map<string, string[]>();
 
 export const likeByMessages = new Map(
-  [...messages.values()].map((msg) => {
+  [...messagesMap.values()].map((msg) => {
     const copyUser = new Map(users);
 
     return [
@@ -72,7 +72,7 @@ export const messagesByTimeline = new Map<string, string[]>();
 
 export const timelinesByUser = new Map(
   [...users.values()].map((user) => {
-    const copyMessages = new Map(messages);
+    const copyMessages = new Map(messagesMap);
     const timelineId = randomId();
 
     const messageIds: string[] = (() => {
@@ -89,7 +89,7 @@ export const timelinesByUser = new Map(
     })();
 
     messageIds.sort((mIdA, mIdB) => {
-      const [mA, mB] = [messages.get(mIdA), messages.get(mIdB)];
+      const [mA, mB] = [messagesMap.get(mIdA), messagesMap.get(mIdB)];
 
       if (!mA || !mB) return 0;
 

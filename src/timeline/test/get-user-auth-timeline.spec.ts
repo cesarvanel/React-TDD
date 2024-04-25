@@ -21,7 +21,7 @@ describe("feature: get a time line when a user is authenticated ", () => {
 
     authFixture.givenAuthenticatedUserId("cesar");
 
-    fixture.givenExistingTimeLine({
+    fixture.givenExistingRemoteTimeLine({
       id: "cesar-timeline-id",
       user: "cesar",
       messages: [

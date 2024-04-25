@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { selectAuthUser } from "../../auth/feature/AuthSlice";
-import { selectIsUserTimeLoading } from "../features/Timeline.Slice";
 
 export const GetAuthUserTimeLine = createAsyncThunk(
   "get-auth-user-timeline",
@@ -16,6 +15,7 @@ export const GetAuthUserTimeLine = createAsyncThunk(
       return timeline;
     } catch (error) {
       const err = error as unknown as any;
+
       return rejectWithValue(err);
     }
   },

@@ -13,6 +13,7 @@ export const GetUserTimeLine = createAsyncThunk(
         userId: params.userId,
       });
 
+
       return timeline;
     } catch (error) {
       const err = error as unknown as any;
