@@ -18,7 +18,7 @@ export const GetAuthUserTimeLine = createAsyncThunk(
 
       return rejectWithValue(err);
     }
-  },
+  }
   // {
   //   condition(_, { getState }) {
   //     const isTimelineUserLoading = selectIsUserTimeLoading(getState());
