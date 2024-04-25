@@ -44,15 +44,15 @@ export const createTimeLineFixture = (
     },
 
     async whenRetrievingAuthUserTimeLine() {
-        store = createTestStore(
-          {
-            authUserGateway,
-            timelineGateway,
-          },
-          testStateBuilderProvider.getState()
-        );
-        await store.dispatch(GetAuthUserTimeLine());
-      },
+      store = createTestStore(
+        {
+          authUserGateway,
+          timelineGateway,
+        },
+        testStateBuilderProvider.getState()
+      );
+      await store.dispatch(GetAuthUserTimeLine());
+    },
 
     timelineUserShouldBeLoading() {
       const isTimelineUserLoading = selectIsUserTimeLoading(store.getState());
@@ -70,7 +70,6 @@ export const createTimeLineFixture = (
         publishedAt: string;
       }[];
     }) {
-        
       const isLoading = selectIsUserTimeLoading(store.getState());
 
       const expectedState = stateBuilder(testStateBuilderProvider.getState())

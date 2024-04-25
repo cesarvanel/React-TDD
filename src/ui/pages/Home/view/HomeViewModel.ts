@@ -2,14 +2,14 @@ import { RootState } from "../../../../app/store/Store";
 import { selectAuthUser } from "../../../../auth/feature/AuthSlice";
 import { selectMessagesByIds } from "../../../../messages/feature/MessageSlice";
 import {
-  selectAuthUserTimeline,
+  selectTimelineForUser,
   selectIsUserTimeLoading,
 } from "../../../../timeline/features/Timeline.Slice";
 import * as timeago from "timeago.js";
 
 export const selectHomeViewModel = (state: RootState) => {
   const authUser = selectAuthUser(state);
-  const timeline = selectAuthUserTimeline(authUser, state);
+  const timeline = selectTimelineForUser(authUser, state);
 
   const loading = selectIsUserTimeLoading(state);
 
