@@ -3,8 +3,7 @@ import { MessagesAdapter } from "../domain/Messages";
 import { RootState } from "../../app/store/Store";
 import { GetAuthUserTimeLine } from "../../timeline/usecase/GetAuthUserTimeLine";
 import { GetUserTimeLine } from "../../timeline/usecase/GetUserTimeLine";
-import { PostMessagePending, PostMessages } from "../../timeline/usecase/PostMessages";
-
+import { PostMessagePending } from "../../timeline/usecase/PostMessages";
 
 export const MessagesSlice = createSlice({
   name: "messages",

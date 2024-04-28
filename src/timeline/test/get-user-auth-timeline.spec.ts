@@ -3,19 +3,14 @@ import { createTimeLineFixture, TimelinesFixture } from "./fixture-timeline";
 import { AuthFixture, createAuthFixture } from "../../auth/test/fixture-auth";
 import { stateBuilderProvider } from "../../helpers/test-helper/StateBuilter";
 
-
 describe("feature: get a time line when a user is authenticated ", () => {
-
-
-  const  testStateBuilderProvider = stateBuilderProvider()
-  let authFixture :AuthFixture
-  let fixture :TimelinesFixture;
-
-
-  beforeEach(() =>{
-    authFixture = createAuthFixture(testStateBuilderProvider)
-    fixture = createTimeLineFixture(testStateBuilderProvider)
-  })
+  const testStateBuilderProvider = stateBuilderProvider();
+  let authFixture: AuthFixture;
+  let fixture: TimelinesFixture;
+  beforeEach(() => {
+    authFixture = createAuthFixture(testStateBuilderProvider);
+    fixture = createTimeLineFixture(testStateBuilderProvider);
+  });
   it("Example: it cesar it authenticated ", async () => {
     // arrange
 
@@ -69,6 +64,3 @@ describe("feature: get a time line when a user is authenticated ", () => {
     });
   });
 });
-
-
-

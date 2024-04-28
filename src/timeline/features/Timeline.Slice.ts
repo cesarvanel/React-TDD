@@ -5,7 +5,6 @@ import { RootState } from "../../app/store/Store";
 import { GetUserTimeLine } from "../usecase/GetUserTimeLine";
 import { PostMessages } from "../usecase/PostMessages";
 
-
 export const TimeLineSlice = createSlice({
   name: "timeline",
   initialState: TimelineAdapter.getInitialState({
@@ -14,10 +13,14 @@ export const TimeLineSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(PostMessages.pending, (state, action) => {
+      const timeline = TimelineAdapter.getSelectors().selectById(
+        state,
+        action.meta.arg.id
+      );
       TimelineAdapter.updateOne(state, {
-        id: action.meta.arg.timelineId,
+        id: timeline.id,
         changes: {
-          messages: [action.meta.arg.id],
+          messages: [...timeline.messages, action.meta.arg.id],
         },
       });
     });
