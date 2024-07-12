@@ -1,12 +1,51 @@
 .TreeNode {
+  cursor: pointer;
   .text-label {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
   .children {
     padding-left: 10px;
     border-left: 1px solid red;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
-    
+    overflow: hidden;
   }
+
+  .expanded {
+    display: block;
+    animation-name: expand;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+  }
+
+  .collapsed {
+    animation-name: closeExpand;
+    animation-duration: 0.4s;
+    animation-fill-mode:forwards ;
+
+  }
+
+
+  @keyframes expand {
+    from {
+      max-height: 0;
+      opacity: 0;
+    }
+    to {
+      max-height: 500px; /* Utilisez une valeur suffisamment grande pour couvrir la hauteur de l'élément ouvert */
+      opacity: 1;
+    }
+  }
+
+  @keyframes closeExpand {
+    from {
+      max-height: 500px; /* Utilisez la même valeur que dans l'animation d'ouverture */
+      opacity: 1;
+    }
+    to {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+
 }
