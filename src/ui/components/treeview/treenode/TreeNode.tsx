@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TreeView, TreeViewDataIltem } from "../TreeView";
 import styles from "./TreeNode.module.scss";
-import { classNames } from "../../../../utils/class-name/class-name";
+import { classNameModule } from "../../../../utils/class-name/classNameModule";
 
 type OwnProps = {
   node: TreeViewDataIltem;
@@ -10,10 +10,11 @@ type OwnProps = {
 export const TreeNode: React.FC<OwnProps> = ({ node }) => {
   const [showChildren, setShowChildren] = useState(false);
 
+  const className = classNameModule(styles);
+
   const handleShowChildren = () => {
     setShowChildren(!showChildren);
   };
-
 
   return (
     <div className={styles["TreeNode"]}>
@@ -26,10 +27,10 @@ export const TreeNode: React.FC<OwnProps> = ({ node }) => {
       </div>
 
       <div
-        {...classNames(styles["children"], {
-          [styles["expanded"]]: showChildren,
-          [styles["collapsed"]]: !showChildren,
+        {...className(`children`, {
+          expanded: showChildren,
         })}
+        
       >
         {showChildren && <TreeView treeDatas={node.children} />}
       </div>

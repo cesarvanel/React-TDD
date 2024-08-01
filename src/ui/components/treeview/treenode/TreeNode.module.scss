@@ -8,21 +8,15 @@
     border-left: 1px solid red;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
-    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out  ;
+    overflow:hidden;
   }
 
   .expanded {
-    display: block;
-    animation-name: expand;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
-  }
-
-  .collapsed {
-    animation-name: closeExpand;
-    animation-duration: 0.4s;
-    animation-fill-mode:forwards ;
-
+    opacity: 1;
+    max-height: 500px;
   }
 
 

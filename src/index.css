@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family:"Regular";
   /* line-height: 1.5; */
   font-weight: 400;
   color-scheme: light dark;
@@ -67,4 +67,34 @@ body {
   margin: 0;
   min-height: 100vh;
   overflow: hidden;
+  font-family: "Regular";
+
+}
+
+@font-face {
+  font-family: "Regular";   /*Can be any text*/
+  src: local("Lexend-Regular"),
+    url("./assets/font/Lexend-Regular.woff2") format("woff2");
+    font-weight: 400;
+}
+
+@font-face {
+  font-family: "Medium";   /*Can be any text*/
+  src: local("Lexend-Medium"),
+    url("./assets/font/Lexend-Medium.woff2") format("woff2");
+    font-weight: 600;
+}
+
+@font-face {
+  font-family: "Bold";   /*Can be any text*/
+  src: local("Lexend-Bold"),
+    url("./assets/font/Lexend-Bold.woff2") format("woff2");
+    font-weight: bold;
+}
+
+@font-face {
+  font-family: "ExtraBold";   /*Can be any text*/
+  src: local("Lexend-ExtraBold"),
+    url("./assets/font/Lexend-ExtraBold.woff2") format("woff2");
+    font-weight: 900;
 }
