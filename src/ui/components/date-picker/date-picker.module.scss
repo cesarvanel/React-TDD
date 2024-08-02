@@ -81,7 +81,9 @@
       .container-day {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
+        column-gap: 0;
+        row-gap: 0;
+
         .day-value {
           display: flex;
           justify-content: center;
@@ -92,6 +94,10 @@
           font-family: "Medium";
           background-color: white;
           border-radius: 6px;
+          transition: background-color 0.4s ease-in-out;
+        }
+        :hover{
+          background-color: #0047ff ;
         }
 
         .disabled-date {
@@ -105,13 +111,22 @@
         }
 
         .today {
-          border: 2px solid #0047FF;
+          border: 2px solid #0047ff;
+        
         }
 
-        .in-range{
+        .in-range {
           background-color: #cce5ff;
-          color: #0047FF;
+          color: #0047ff;
+        }
+        .is-range-or-end-selected{
+          background-color: #0047ff;
+          color: #ffffff;
 
+        }
+        .next-month {
+          color: #00175426;
+          background-color: transparent;
         }
       }
     }

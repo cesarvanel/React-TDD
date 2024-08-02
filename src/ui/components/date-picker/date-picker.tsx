@@ -5,6 +5,7 @@ import { classNameModule } from "../../../utils/class-name/classNameModule";
 import LeftIcon from "../icons/LeftIcon";
 import RightIcon from "../icons/RightIcon";
 import RectangleIcon from "../icons/RectangleIcon";
+import { N } from "vitest/dist/reporters-P7C2ytIv.js";
 
 const className = classNameModule(styles);
 
@@ -152,11 +153,28 @@ export const DatePicker: React.FC<OwnProps> = ({
     return day === todayDay;
   };
 
+  const isRangeStartSelected = (day: number): boolean => {
+    return (
+      !!rangeStart &&
+      rangeStart.getDate() === day &&
+      rangeStart.getMonth() === currentMonth &&
+      rangeStart.getFullYear() === currentYear
+    );
+  };
+
+  const isRangeEndSelected = (day: number): boolean => {
+    return (
+      !!rangeEnd &&
+      rangeEnd.getDate() === day &&
+      rangeEnd.getMonth() === currentMonth &&
+      rangeEnd.getFullYear() === currentYear
+    );
+  };
+
   const renderDays = (): JSX.Element[] => {
     const days: JSX.Element[] = [];
     const totalDays = daysInMonth(currentMonth, currentYear);
     const startDay = getFirstDayOfMonth(currentMonth, currentYear);
-
     const disabledDate = totalDays - startDay + 1;
 
     for (let i = disabledDate; i <= totalDays; i++) {
@@ -182,7 +200,26 @@ export const DatePicker: React.FC<OwnProps> = ({
             active: isSelectedDay,
             today: isToday,
             "in-range": isInRange(day),
+            "is-range-or-end-selected":
+              isRangeStartSelected(day) || isRangeEndSelected(day),
           })}
+        >
+          {day}
+        </div>
+      );
+    }
+
+    const totalCells = startDay + totalDays;
+    const nextMonthDays = 42 - totalCells;
+    for (let day = 1; day <= nextMonthDays; day++) {
+      days.push(
+        <div
+          {...className("day-value", {
+            "next-month": true,
+            "in-range": isInRange(day),
+          })}
+          key={`next-month${day}`}
+          onClick={(e) => handleDayClick(e, day)}
         >
           {day}
         </div>
