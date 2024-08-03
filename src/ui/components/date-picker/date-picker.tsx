@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./date-picker.module.scss";
 import { classNameModule } from "../../../utils/class-name/classNameModule";
 import LeftIcon from "../icons/LeftIcon";
 import RightIcon from "../icons/RightIcon";
 import RectangleIcon from "../icons/RectangleIcon";
-import { N } from "vitest/dist/reporters-P7C2ytIv.js";
 
 const className = classNameModule(styles);
 
@@ -14,7 +13,8 @@ interface OwnProps {
   rangeMode?: boolean;
   onDateSelect?: (date: Date | null) => void;
   onRangeSelect?: (start: Date | null, end: Date | null) => void;
-  onClose: () => void;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
 const monthsArray: string[] = [
@@ -37,9 +37,10 @@ const daysNameArray: string[] = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 export const DatePicker: React.FC<OwnProps> = ({
   isOpen,
   rangeMode,
-  onClose,
   onDateSelect,
   onRangeSelect,
+  maxDate,
+  minDate,
 }) => {
   const [currentMonth, setCurrentMonth] = useState<number>(
     new Date().getMonth()
@@ -102,6 +103,22 @@ export const DatePicker: React.FC<OwnProps> = ({
 
     const date = new Date(currentYear, currentMonth, day);
     return date >= rangeStart && date <= rangeEnd;
+  };
+
+  const handleDisabledWithOrMaxDate = (day: number) => {
+    const date = new Date(currentYear, currentMonth, day);
+    if (minDate && !maxDate) {
+      return date >= minDate;
+    }
+    if (maxDate && !minDate) {
+      return date <= maxDate;
+    }
+
+    if (maxDate && minDate) {
+      return date >= minDate && date <= maxDate;
+    }
+
+    return true;
   };
 
   const handleDayClick = (
@@ -193,18 +210,20 @@ export const DatePicker: React.FC<OwnProps> = ({
 
       const isToday = handleGetSelectedTodayDay(day);
       days.push(
-        <div
-          key={day}
-          onClick={(e) => handleDayClick(e, day)}
-          {...className("day-value", {
-            active: isSelectedDay,
-            today: isToday,
-            "in-range": isInRange(day),
-            "is-range-or-end-selected":
-              isRangeStartSelected(day) || isRangeEndSelected(day),
-          })}
-        >
-          {day}
+        <div key={day}>
+          <div
+            onClick={(e) => handleDayClick(e, day)}
+            {...className("day-value", {
+              active: isSelectedDay,
+              today: isToday,
+              "in-range": isInRange(day),
+              "is-range-or-end-selected":
+                isRangeStartSelected(day) || isRangeEndSelected(day),
+              "is-min-or-max-day": !handleDisabledWithOrMaxDate(day),
+            })}
+          >
+            {day}
+          </div>
         </div>
       );
     }
@@ -229,8 +248,22 @@ export const DatePicker: React.FC<OwnProps> = ({
     return days;
   };
 
+  const handleCleanRange = () => {
+    setRangeEnd(null);
+    setRangeStart(null);
+    setSelectedDate(null);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (!isOpen) {
+        handleCleanRange();
+      }
+    };
+  }, [isOpen]);
+
   return (
-    <div {...className("DatePicker", { show: isOpen })}>
+    <div {...className("DatePicker")}>
       <div role="button" {...className("content")}>
         <div className={styles["grid-one"]}>
           <button onClick={handlePrevMonth} className={styles["icon"]}>

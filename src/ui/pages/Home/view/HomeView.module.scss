@@ -1,5 +1,8 @@
 .HomeView {
-
-   overflow: auto;
-    
+  .pop-over{
+   position: relative;
+   .date-piker {
+      position: absolute;
+    }
+  }
 }

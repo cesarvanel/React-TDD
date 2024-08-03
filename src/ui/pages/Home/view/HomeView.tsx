@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHome } from "./useHome";
 import { DatePicker } from "../../../components/date-picker/date-picker";
 import styles from "./HomeView.module.scss";
+import { PopOver } from "../../../components/pop-over/PopOver";
 
 const HomeView = () => {
   const { timeline } = useHome();
- 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const [showPopOver, setShowPopOver] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [rangeStart, setRangeStart] = useState<Date | null>(null);
   const [rangeEnd, setRangeEnd] = useState<Date | null>(null);
@@ -19,30 +20,41 @@ const HomeView = () => {
     setRangeStart(start);
     setRangeEnd(end);
   };
+
+  const handleClosePopOver = () => {
+    setShowPopOver(false);
+    setRangeEnd(null);
+    setRangeStart(null);
+    setSelectedDate(null);
+  };
+
   return (
     <div className={styles["HomeView"]}>
-      {timeline.timeline.type}
+      <div>{timeline.timeline.type}</div>
 
-      <div>
-        <button
-          style={{ padding: "10px" }}
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        >
-          show date
-        </button>
+      <button
+        role="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowPopOver(!showPopOver);
+        }}
+        style={{ marginTop: 50, padding: 10 }}
+      >
+        Show PopOver
+      </button>
+
+      <div className={styles["pop-over"]}>
+        <PopOver isOpen={showPopOver} onClose={handleClosePopOver}>
+          <div className={styles["date-piker"]}>
+            <DatePicker
+              isOpen={showPopOver}
+              rangeMode
+              onDateSelect={handleDateSelect}
+              onRangeSelect={handleRangeSelect}
+            />
+          </div>
+        </PopOver>
       </div>
-
-      <DatePicker
-        rangeMode
-        onDateSelect={handleDateSelect}
-        onRangeSelect={handleRangeSelect}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(!isOpen)}
-      />
-
-      <div style={{ height: 1500 }}></div>
     </div>
   );
 };
