@@ -51,16 +51,14 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
     calendarDays,
     currentMonth,
     currentYear,
-    rangeEnd,
-    rangeStart,
   } = useDatePicker(props);
 
   const [dropDownIsOpen, setDropDownIsOpen] = useState<boolean>(false);
 
-  const handleSelectMonth = (month:number) =>{
-    setDropDownIsOpen(false)
-    handleChangeCurrentMonth(month)
-  }
+  const handleSelectMonth = (month: number) => {
+    setDropDownIsOpen(false);
+    handleChangeCurrentMonth(month);
+  };
   return (
     <div {...className("DatePicker")}>
       <div role="button" {...className("content")}>
@@ -76,27 +74,34 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
                 <RectangleIcon />
               </div>
 
-              <PopOver
-                isOpen={dropDownIsOpen}
-                onClose={() => setDropDownIsOpen(!dropDownIsOpen)}
-              >
-                <div className={styles["drop-down"]}>
-                  <div className={styles["container"]}>
-                    {monthsArray.map((month,index) => {
-                      return (
-                        <div
-                          {...className("every-month", { "selected-month": index === currentMonth })}
-                          key={month}
-                          role="button"
-                          onClick={() =>handleSelectMonth(index)}
-                        >
-                          {month}
-                        </div>
-                      );
-                    })}
+              <div>
+                <PopOver
+                  isOpen={dropDownIsOpen}
+                  onClose={() => setDropDownIsOpen(false)}
+                >
+                  <div className={styles["drop-down"]}>
+                    <div className={styles["container"]}>
+                      {monthsArray.map((month, index) => {
+                        return (
+                          <div
+                            {...className("every-month", {
+                              "selected-month": index === currentMonth,
+                            })}
+                            key={month}
+                            role="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleSelectMonth(index)
+                            }}
+                          >
+                            {month}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              </PopOver>
+                </PopOver>
+              </div>
             </div>
 
             <div className={styles["item"]}>
@@ -144,8 +149,6 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
                       "is-range-or-end-selected":
                         isRangeStartSelected(date) || isRangeEndSelected(date),
                       "is-min-or-max-day": !handleDisabledWithOrMaxDate(date),
-                      "day.first-in-range": !!rangeStart,
-                      "day.last-in-range": !!rangeEnd,
                     })}
                   >
                     {date.day}

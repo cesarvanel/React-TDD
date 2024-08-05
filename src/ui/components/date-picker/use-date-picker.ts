@@ -1,4 +1,3 @@
-import { m } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export interface useDatePickerBehavior {
