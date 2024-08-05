@@ -98,3 +98,24 @@ body {
     url("./assets/font/Lexend-ExtraBold.woff2") format("woff2");
     font-weight: 900;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ADAFB3;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

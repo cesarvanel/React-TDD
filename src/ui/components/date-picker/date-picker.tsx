@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import styles from "./date-picker.module.scss";
 import { classNameModule } from "../../../utils/class-name/classNameModule";
 import LeftIcon from "../icons/LeftIcon";
 import RightIcon from "../icons/RightIcon";
 import RectangleIcon from "../icons/RectangleIcon";
+import { useDatePicker } from "./use-date-picker";
+import { PopOver } from "../pop-over/PopOver";
 
 const className = classNameModule(styles);
 
@@ -34,234 +36,31 @@ const monthsArray: string[] = [
 
 const daysNameArray: string[] = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-export const DatePicker: React.FC<OwnProps> = ({
-  isOpen,
-  rangeMode,
-  onDateSelect,
-  onRangeSelect,
-  maxDate,
-  minDate,
-}) => {
-  const [currentMonth, setCurrentMonth] = useState<number>(
-    new Date().getMonth()
-  );
+export const DatePicker: React.FC<OwnProps> = (props) => {
+  const {
+    handleNextMonth,
+    handleDayClick,
+    handleDisabledWithOrMaxDate,
+    handleGetSelectedDate,
+    handleGetSelectedTodayDay,
+    handlePrevMonth,
+    isInRange,
+    isRangeEndSelected,
+    isRangeStartSelected,
+    handleChangeCurrentMonth,
+    calendarDays,
+    currentMonth,
+    currentYear,
+    rangeEnd,
+    rangeStart,
+  } = useDatePicker(props);
 
-  const [currentYear, setCurrentYear] = useState<number>(
-    new Date().getFullYear()
-  );
+  const [dropDownIsOpen, setDropDownIsOpen] = useState<boolean>(false);
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>();
-
-  const [rangeStart, setRangeStart] = useState<Date | null>(null);
-  const [rangeEnd, setRangeEnd] = useState<Date | null>(null);
-
-  const today = new Date();
-  const todayDay = today.getDate();
-
-  const getFirstDayOfMonth = (month: number, year: number): number => {
-    return new Date(year, month, 1).getDay();
-  };
-
-  const isLeapYear = (year: number): boolean => {
-    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-  };
-
-  const daysInMonth = (month: number, year: number): number => {
-    switch (month) {
-      case 1: // February
-        return isLeapYear(year) ? 29 : 28;
-      case 3:
-      case 5:
-      case 8:
-      case 10: // April, June, September, November
-        return 30;
-      default:
-        return 31;
-    }
-  };
-
-  const handleNextMonth = () => {
-    if (currentMonth < 11) {
-      setCurrentMonth((prev) => prev + 1);
-      return;
-    }
-    setCurrentMonth(0);
-    setCurrentYear((prev) => prev + 1);
-  };
-
-  const handlePrevMonth = () => {
-    if (currentMonth > 0) {
-      setCurrentMonth((prev) => prev - 1);
-      return;
-    }
-    setCurrentMonth(0);
-    setCurrentYear((prev) => prev - 1);
-  };
-
-  const isInRange = (day: number): boolean => {
-    if (!rangeStart || !rangeEnd) return false;
-
-    const date = new Date(currentYear, currentMonth, day);
-    return date >= rangeStart && date <= rangeEnd;
-  };
-
-  const handleDisabledWithOrMaxDate = (day: number) => {
-    const date = new Date(currentYear, currentMonth, day);
-    if (minDate && !maxDate) {
-      return date >= minDate;
-    }
-    if (maxDate && !minDate) {
-      return date <= maxDate;
-    }
-
-    if (maxDate && minDate) {
-      return date >= minDate && date <= maxDate;
-    }
-
-    return true;
-  };
-
-  const handleDayClick = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    day: number
-  ) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-    e.nativeEvent.stopPropagation();
-    e.nativeEvent.preventDefault();
-    e.preventDefault();
-
-    const clickedDate = new Date(currentYear, currentMonth, day);
-
-    if (rangeMode) {
-      if (!rangeStart || (rangeStart && rangeEnd)) {
-        setRangeStart(clickedDate);
-        setRangeEnd(null);
-        onRangeSelect?.(clickedDate, null);
-        return;
-      }
-      if (rangeStart && !rangeEnd) {
-        if (clickedDate < rangeStart) {
-          setRangeEnd(rangeStart);
-          setRangeStart(clickedDate);
-          onRangeSelect?.(clickedDate, rangeStart);
-          return;
-        }
-        setRangeEnd(clickedDate);
-        onRangeSelect?.(rangeStart, clickedDate);
-        return;
-      }
-    }
-    setSelectedDate(new Date(currentYear, currentMonth, day));
-    onDateSelect?.(clickedDate);
-  };
-
-  const handleGetSelectedDate = (day: number): boolean => {
-    const isSelected =
-      !!selectedDate &&
-      selectedDate.getDate() === day &&
-      selectedDate.getMonth() === currentMonth &&
-      selectedDate.getFullYear() === currentYear;
-
-    return isSelected;
-  };
-
-  const handleGetSelectedTodayDay = (day: number): boolean => {
-    return day === todayDay;
-  };
-
-  const isRangeStartSelected = (day: number): boolean => {
-    return (
-      !!rangeStart &&
-      rangeStart.getDate() === day &&
-      rangeStart.getMonth() === currentMonth &&
-      rangeStart.getFullYear() === currentYear
-    );
-  };
-
-  const isRangeEndSelected = (day: number): boolean => {
-    return (
-      !!rangeEnd &&
-      rangeEnd.getDate() === day &&
-      rangeEnd.getMonth() === currentMonth &&
-      rangeEnd.getFullYear() === currentYear
-    );
-  };
-
-  const renderDays = (): JSX.Element[] => {
-    const days: JSX.Element[] = [];
-    const totalDays = daysInMonth(currentMonth, currentYear);
-    const startDay = getFirstDayOfMonth(currentMonth, currentYear);
-    const disabledDate = totalDays - startDay + 1;
-
-    for (let i = disabledDate; i <= totalDays; i++) {
-      days.push(
-        <div
-          key={`empty-${i}`}
-          {...className("day-value", { "disabled-date": true })}
-        >
-          {i}
-        </div>
-      );
-    }
-
-    for (let day = 1; day <= totalDays; day++) {
-      const isSelectedDay = handleGetSelectedDate(day);
-
-      const isToday = handleGetSelectedTodayDay(day);
-      days.push(
-        <div key={day}>
-          <div
-            onClick={(e) => handleDayClick(e, day)}
-            {...className("day-value", {
-              active: isSelectedDay,
-              today: isToday,
-              "in-range": isInRange(day),
-              "is-range-or-end-selected":
-                isRangeStartSelected(day) || isRangeEndSelected(day),
-              "is-min-or-max-day": !handleDisabledWithOrMaxDate(day),
-            })}
-          >
-            {day}
-          </div>
-        </div>
-      );
-    }
-
-    const totalCells = startDay + totalDays;
-    const nextMonthDays = 42 - totalCells;
-    for (let day = 1; day <= nextMonthDays; day++) {
-      days.push(
-        <div
-          {...className("day-value", {
-            "next-month": true,
-            "in-range": isInRange(day),
-          })}
-          key={`next-month${day}`}
-          onClick={(e) => handleDayClick(e, day)}
-        >
-          {day}
-        </div>
-      );
-    }
-
-    return days;
-  };
-
-  const handleCleanRange = () => {
-    setRangeEnd(null);
-    setRangeStart(null);
-    setSelectedDate(null);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (!isOpen) {
-        handleCleanRange();
-      }
-    };
-  }, [isOpen]);
-
+  const handleSelectMonth = (month:number) =>{
+    setDropDownIsOpen(false)
+    handleChangeCurrentMonth(month)
+  }
   return (
     <div {...className("DatePicker")}>
       <div role="button" {...className("content")}>
@@ -276,6 +75,28 @@ export const DatePicker: React.FC<OwnProps> = ({
                 <span>{monthsArray[currentMonth]}</span>
                 <RectangleIcon />
               </div>
+
+              <PopOver
+                isOpen={dropDownIsOpen}
+                onClose={() => setDropDownIsOpen(!dropDownIsOpen)}
+              >
+                <div className={styles["drop-down"]}>
+                  <div className={styles["container"]}>
+                    {monthsArray.map((month,index) => {
+                      return (
+                        <div
+                          {...className("every-month", { "selected-month": index === currentMonth })}
+                          key={month}
+                          role="button"
+                          onClick={() =>handleSelectMonth(index)}
+                        >
+                          {month}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </PopOver>
             </div>
 
             <div className={styles["item"]}>
@@ -302,7 +123,37 @@ export const DatePicker: React.FC<OwnProps> = ({
             })}
           </div>
 
-          <div className={styles["container-day"]}>{renderDays()}</div>
+          <div className={styles["container-day"]}>
+            {calendarDays.map((date, key) => {
+              const isToday = handleGetSelectedTodayDay(date);
+              return (
+                <div
+                  {...className("day-content", {
+                    "active-range": isInRange(date),
+                  })}
+                  key={date.day.toString() + key}
+                >
+                  <div
+                    onClick={(e) => handleDayClick(e, date.day)}
+                    {...className("day-value", {
+                      "prev-month": date.isPrevDay,
+                      "next-month": date.isNextDay,
+                      "active-day": handleGetSelectedDate(date.day),
+                      "today-day": isToday,
+                      "in-range": isInRange(date),
+                      "is-range-or-end-selected":
+                        isRangeStartSelected(date) || isRangeEndSelected(date),
+                      "is-min-or-max-day": !handleDisabledWithOrMaxDate(date),
+                      "day.first-in-range": !!rangeStart,
+                      "day.last-in-range": !!rangeEnd,
+                    })}
+                  >
+                    {date.day}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
