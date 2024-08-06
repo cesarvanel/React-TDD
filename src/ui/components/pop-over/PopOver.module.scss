@@ -1,14 +1,14 @@
 .PopOver {
-  max-height: 0;
+  height: 0;
   width: max-content;
   opacity: 0;
-  transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
-
+  transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
 }
 
 .open{
     opacity: 1;
+    height: auto;
     max-height: 1000px;
 
 }

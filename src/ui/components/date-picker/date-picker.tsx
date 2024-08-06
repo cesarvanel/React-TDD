@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 
 import styles from "./date-picker.module.scss";
 import { classNameModule } from "../../../utils/class-name/classNameModule";
@@ -7,6 +7,7 @@ import RightIcon from "../icons/RightIcon";
 import RectangleIcon from "../icons/RectangleIcon";
 import { useDatePicker } from "./use-date-picker";
 import useClickOutside from "../../../hook/use-onclick-outside";
+import { PopOver } from "../pop-over/PopOver";
 
 const className = classNameModule(styles);
 
@@ -63,7 +64,7 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
     setDropDownIsOpen(false);
   };
 
-  const ref = useClickOutside<HTMLDivElement>(() =>handleCloseDropDown() );
+  const ref = useClickOutside<HTMLDivElement>(() => handleCloseDropDown());
   return (
     <div {...className("DatePicker")}>
       <div role="button" {...className("content")}>
@@ -73,38 +74,43 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
           </button>
 
           <div className={styles["middle"]}>
-            <div
-              role="button"
-              onClick={(e) => setDropDownIsOpen(!dropDownIsOpen)}
-              className={styles["item"]}
-            >
-              <span>{monthsArray[currentMonth]}</span>
-              <RectangleIcon />
+            <div>
+              <div
+                role="button"
+                onClick={() => setDropDownIsOpen(!dropDownIsOpen)}
+                className={styles["item"]}
+                style={{ pointerEvents: dropDownIsOpen ? "none" : undefined }}
+              >
+                <span>{monthsArray[currentMonth]}</span>
+                <RectangleIcon />
+              </div>
 
-              {dropDownIsOpen && (
-                <div ref={ref} className={styles["pop-over"]}>
-                  <div className={styles["drop-down"]}>
-                    <div className={styles["container"]}>
-                      {monthsArray.map((month, index) => {
-                        return (
-                          <div
-                            {...className("every-month", {
-                              "selected-month": index === currentMonth,
-                            })}
-                            key={month}
-                            role="button"
-                            onClick={() => {
-                              handleSelectMonth(index);
-                            }}
-                          >
-                            {month}
-                          </div>
-                        );
-                      })}
+              <div>
+                <PopOver isOpen={dropDownIsOpen} onClose={handleCloseDropDown}>
+                  <div ref={ref} className={styles["pop-over"]}>
+                    <div className={styles["drop-down"]}>
+                      <div className={styles["container"]}>
+                        {monthsArray.map((month, index) => {
+                          return (
+                            <div
+                              {...className("every-month", {
+                                "selected-month": index === currentMonth,
+                              })}
+                              key={month}
+                              role="button"
+                              onClick={() => {
+                                handleSelectMonth(index);
+                              }}
+                            >
+                              {month}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                </PopOver>
+              </div>
             </div>
 
             <div className={styles["item"]}>

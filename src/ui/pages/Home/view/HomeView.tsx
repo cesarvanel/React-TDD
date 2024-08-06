@@ -38,7 +38,11 @@ const HomeView = () => {
           e.stopPropagation();
           setShowPopOver(!showPopOver);
         }}
-        style={{ marginTop: 50, padding: 10 }}
+        style={{
+          marginTop: 50,
+          padding: 10,
+          pointerEvents: showPopOver ? "none" : undefined,
+        }}
       >
         Show PopOver
       </button>

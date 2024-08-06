@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 
 import styles from "./PopOver.module.scss";
 import { classNameModule } from "../../../utils/class-name/classNameModule";
@@ -13,12 +13,11 @@ interface OwnProps {
 }
 
 export const PopOver: React.FC<OwnProps> = ({ children, isOpen, onClose }) => {
-
- const ref =  useClickOutside<HTMLDivElement>(()=>onClose())
+  const ref = useClickOutside<HTMLDivElement>(() => onClose());
 
   return (
     <div ref={ref} {...className("PopOver", { open: isOpen })}>
-      <div >{children}</div>
+      <div>{children}</div>
     </div>
   );
 };
