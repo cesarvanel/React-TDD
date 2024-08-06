@@ -85,31 +85,32 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
                 <RectangleIcon />
               </div>
 
-              <div>
-                <PopOver isOpen={dropDownIsOpen} onClose={handleCloseDropDown}>
-                  <div ref={ref} className={styles["pop-over"]}>
-                    <div className={styles["drop-down"]}>
-                      <div className={styles["container"]}>
-                        {monthsArray.map((month, index) => {
-                          return (
-                            <div
-                              {...className("every-month", {
-                                "selected-month": index === currentMonth,
-                              })}
-                              key={month}
-                              role="button"
-                              onClick={() => {
-                                handleSelectMonth(index);
-                              }}
-                            >
-                              {month}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+              <div
+              ref={ref}
+                {...className("pop-over", {
+                  "pop-over-open": dropDownIsOpen,
+                })}
+              >
+                <div className={styles["drop-down"]}>
+                  <div className={styles["container"]}>
+                    {monthsArray.map((month, index) => {
+                      return (
+                        <div
+                          {...className("every-month", {
+                            "selected-month": index === currentMonth,
+                          })}
+                          key={month}
+                          role="button"
+                          onClick={() => {
+                            handleSelectMonth(index);
+                          }}
+                        >
+                          {month}
+                        </div>
+                      );
+                    })}
                   </div>
-                </PopOver>
+                </div>
               </div>
             </div>
 
