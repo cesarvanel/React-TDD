@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
 
 import styles from "./date-picker.module.scss";
 import { classNameModule } from "../../../utils/class-name/classNameModule";
@@ -6,7 +6,7 @@ import LeftIcon from "../icons/LeftIcon";
 import RightIcon from "../icons/RightIcon";
 import RectangleIcon from "../icons/RectangleIcon";
 import { useDatePicker } from "./use-date-picker";
-import { PopOver } from "../pop-over/PopOver";
+import useClickOutside from "../../../hook/use-onclick-outside";
 
 const className = classNameModule(styles);
 
@@ -52,13 +52,18 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
     currentMonth,
     currentYear,
   } = useDatePicker(props);
-
   const [dropDownIsOpen, setDropDownIsOpen] = useState<boolean>(false);
 
   const handleSelectMonth = (month: number) => {
     setDropDownIsOpen(false);
     handleChangeCurrentMonth(month);
   };
+
+  const handleCloseDropDown = () => {
+    setDropDownIsOpen(false);
+  };
+
+  const ref = useClickOutside<HTMLDivElement>(() =>handleCloseDropDown() );
   return (
     <div {...className("DatePicker")}>
       <div role="button" {...className("content")}>
@@ -68,17 +73,16 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
           </button>
 
           <div className={styles["middle"]}>
-            <div className={styles["item"]}>
-              <div>
-                <span>{monthsArray[currentMonth]}</span>
-                <RectangleIcon />
-              </div>
+            <div
+              role="button"
+              onClick={(e) => setDropDownIsOpen(!dropDownIsOpen)}
+              className={styles["item"]}
+            >
+              <span>{monthsArray[currentMonth]}</span>
+              <RectangleIcon />
 
-              <div>
-                <PopOver
-                  isOpen={dropDownIsOpen}
-                  onClose={() => setDropDownIsOpen(false)}
-                >
+              {dropDownIsOpen && (
+                <div ref={ref} className={styles["pop-over"]}>
                   <div className={styles["drop-down"]}>
                     <div className={styles["container"]}>
                       {monthsArray.map((month, index) => {
@@ -89,9 +93,8 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
                             })}
                             key={month}
                             role="button"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleSelectMonth(index)
+                            onClick={() => {
+                              handleSelectMonth(index);
                             }}
                           >
                             {month}
@@ -100,15 +103,13 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
                       })}
                     </div>
                   </div>
-                </PopOver>
-              </div>
+                </div>
+              )}
             </div>
 
             <div className={styles["item"]}>
-              <div>
-                <span>{currentYear}</span>
-                <RectangleIcon />
-              </div>
+              <span>{currentYear}</span>
+              <RectangleIcon />
             </div>
           </div>
 
@@ -139,11 +140,11 @@ export const DatePicker: React.FC<OwnProps> = (props) => {
                   key={date.day.toString() + key}
                 >
                   <div
-                    onClick={(e) => handleDayClick(e, date.day)}
+                    onClick={(e) => handleDayClick(e, date)}
                     {...className("day-value", {
                       "prev-month": date.isPrevDay,
                       "next-month": date.isNextDay,
-                      "active-day": handleGetSelectedDate(date.day),
+                      "active-day": handleGetSelectedDate(date),
                       "today-day": isToday,
                       "in-range": isInRange(date),
                       "is-range-or-end-selected":

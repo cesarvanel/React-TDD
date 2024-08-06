@@ -51,10 +51,15 @@
           }
         }
 
+       
+      }
+
+      .pop-over {
+        position: relative;
         .drop-down {
           position: absolute;
-          top: 55px;
-          left: 0px;
+          top: 30px;
+          left: -95px;
           background-color: white;
           font-family: "Medium";
           font-size: 14px;
@@ -102,12 +107,9 @@
       .container-day {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
 
         .day-content {
-          width: 100%;
-          height: 100%;
-
+          padding: 2px;
           .day-value {
             display: flex;
             justify-content: center;
@@ -135,7 +137,7 @@
           .in-range {
             background-color: #cce5ff;
             color: #0047ff;
-            margin: 0;
+            border-radius: 0;
           }
           .is-range-or-end-selected {
             background-color: #0047ff;
@@ -151,6 +153,11 @@
             color: #00175426;
             background: none;
           }
+        }
+
+        .active-range{
+          padding:0;
+
         }
       }
     }

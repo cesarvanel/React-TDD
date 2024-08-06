@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useHome } from "./useHome";
 import { DatePicker } from "../../../components/date-picker/date-picker";
 import styles from "./HomeView.module.scss";
@@ -43,18 +43,16 @@ const HomeView = () => {
         Show PopOver
       </button>
 
-      <div className={styles["pop-over"]}>
-        <PopOver isOpen={showPopOver} onClose={handleClosePopOver}>
-          <div className={styles["date-piker"]}>
-            <DatePicker
-              isOpen={showPopOver}
-              rangeMode
-              onDateSelect={handleDateSelect}
-              onRangeSelect={handleRangeSelect}
-            />
-          </div>
-        </PopOver>
-      </div>
+      <PopOver isOpen={showPopOver} onClose={handleClosePopOver}>
+        <div className={styles["date-piker"]}>
+          <DatePicker
+            isOpen={showPopOver}
+            rangeMode
+            onDateSelect={handleDateSelect}
+            onRangeSelect={handleRangeSelect}
+          />
+        </div>
+      </PopOver>
     </div>
   );
 };

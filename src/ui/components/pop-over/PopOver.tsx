@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
 import styles from "./PopOver.module.scss";
 import { classNameModule } from "../../../utils/class-name/classNameModule";
-import { useOnClickOutside } from "../../../hook/use-onclick-outside";
+import useClickOutside from "../../../hook/use-onclick-outside";
 
 const className = classNameModule(styles);
 
@@ -13,13 +13,12 @@ interface OwnProps {
 }
 
 export const PopOver: React.FC<OwnProps> = ({ children, isOpen, onClose }) => {
-  const ref = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(ref, onClose);
+ const ref =  useClickOutside<HTMLDivElement>(()=>onClose())
 
   return (
     <div ref={ref} {...className("PopOver", { open: isOpen })}>
-      <div>{children}</div>
+      <div >{children}</div>
     </div>
   );
 };

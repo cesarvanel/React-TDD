@@ -4,10 +4,10 @@ export interface useDatePickerBehavior {
   handleNextMonth: () => void;
   handlePrevMonth: () => void;
   isInRange: (date: DayModel) => boolean;
-  handleGetSelectedDate: (day: number) => boolean;
+  handleGetSelectedDate: (date: DayModel) => boolean;
   handleDayClick: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    day: number
+    date: DayModel
   ) => void;
   isRangeStartSelected: (date: DayModel) => boolean;
   handleGetSelectedTodayDay: (date: DayModel) => boolean;
@@ -129,7 +129,7 @@ export const useDatePicker = ({
 
   const handleDayClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    day: number
+    date: DayModel
   ) => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
@@ -137,7 +137,9 @@ export const useDatePicker = ({
     e.nativeEvent.preventDefault();
     e.preventDefault();
 
-    const clickedDate = new Date(currentYear, currentMonth, day);
+    const clickedDate = new Date(currentYear, currentMonth, date.day);
+
+    if(!date.isMonthDay) return
 
     if (rangeMode) {
       if (!rangeStart || (rangeStart && rangeEnd)) {
@@ -158,14 +160,16 @@ export const useDatePicker = ({
         return;
       }
     }
-    setSelectedDate(new Date(currentYear, currentMonth, day));
+    setSelectedDate(new Date(currentYear, currentMonth, date.day));
     onDateSelect?.(clickedDate);
   };
 
-  const handleGetSelectedDate = (day: number): boolean => {
+  const handleGetSelectedDate = (date: DayModel): boolean => {
+
+    if(!date.isMonthDay) return false
     const isSelected =
       !!selectedDate &&
-      selectedDate.getDate() === day &&
+      selectedDate.getDate() === date.day &&
       selectedDate.getMonth() === currentMonth &&
       selectedDate.getFullYear() === currentYear;
 
